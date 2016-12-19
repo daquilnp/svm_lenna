@@ -23,10 +23,12 @@ def main():
 	# print TestNeuralNetwork(testing_set, svm_clf)
 	result_img = GenerateImage(img_tuple[0], svm_clf)
 	cv2.imwrite('result_img.png',result_img)
-	plt.subplot(121),plt.imshow(img_tuple[0])
-	plt.title('Input Image'), plt.xticks([]), plt.yticks([])
-	plt.subplot(122),plt.imshow(result_img, cmap=plt.cm.gray_r)
-	plt.title('Output Image'), plt.xticks([]), plt.yticks([])
+	plt.subplot(131),plt.imshow(cv2.imread(IMAGE_FILE, cv2.CV_LOAD_IMAGE_GRAYSCALE), cmap=plt.cm.gray_r)
+	plt.title('Original Lenna Image'), plt.xticks([]), plt.yticks([])
+	plt.subplot(132),plt.imshow(np.invert(img_tuple[0]), cmap=plt.cm.gray_r)
+	plt.title('Canny Edge Detection Image'), plt.xticks([]), plt.yticks([])
+	plt.subplot(133),plt.imshow(result_img, cmap=plt.cm.gray_r)
+	plt.title('SVM Reconstructed Image'), plt.xticks([]), plt.yticks([])
 	plt.show()
 
 def clean_image_edge():
@@ -147,7 +149,7 @@ def GetRandomSet(img_bin, overlap_image, set_size):
 def TrainNeuralNetwork(training_set):
 	nn_inputs = training_set[1]
 	nn_expcted_outputs = training_set[2]
-	clf = svm.SVC(gamma=0.001, C=100)
+	clf = svm.SVC(kernel='linear')
 	clf.fit(nn_inputs, nn_expcted_outputs)
 
 	return clf
